@@ -1,11 +1,22 @@
+import csv
 import pandas as pd
+
+# Leitura estruturada inicial com csv.DictReader
+with open("varejo.csv", mode="r", encoding="utf-8", newline="") as arquivo_csv:
+    leitor_csv = csv.DictReader(arquivo_csv, delimiter=";")
+    colunas_dictreader = [coluna for coluna in leitor_csv.fieldnames if coluna]
+    registros_dictreader = sum(1 for _ in leitor_csv)
+
+print("--- Leitura estruturada com csv.DictReader ---")
+print("Número de registros:", registros_dictreader)
+print("Colunas identificadas:", colunas_dictreader)
 
 # Carrega a base de dados para uma tabela chamada df
 df = pd.read_csv("varejo.csv", sep=";")
 df = df.dropna(axis=1, how="all")
 
 # Mostra informações iniciais sobre a base
-print("Número de registros:", len(df))
+print("Número de registros com pandas:", len(df))
 print("\nNomes das colunas:")
 print(df.columns.tolist())
 

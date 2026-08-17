@@ -19,17 +19,18 @@ Para executar o script, salve o arquivo `varejo.csv` na mesma pasta de `miniproj
 - `miniprojeto_varejo.py`: script que realiza a leitura, limpeza e análise dos dados.
 - `df_limpo.csv`: base gerada após o tratamento dos dados.
 - `README.md`: documentação principal do projeto.
-- `README_Mateus_Aimi_Analise_de_Dados_T4.md`: instruções simples de execução, que será criado ao final.
+- `README_Mateus_Aimi_Analise_de_Dados_T4.md`: instruções simples de execução.
 
 ## Tecnologias utilizadas
 
 - Python 3.14
+- csv (biblioteca nativa do Python)
 - pandas 3.0.5
 - Git e GitHub
 
 ## Etapas realizadas
 
-1. Leitura da base `varejo.csv` com pandas, usando ponto e vírgula como separador.
+1. Leitura estruturada inicial da base `varejo.csv` com `csv.DictReader` e leitura para análise com pandas, usando ponto e vírgula como separador.
 2. Remoção de quatro colunas totalmente vazias, criadas pelos separadores extras presentes no arquivo original.
 3. Verificação de valores nulos, duplicatas, datas e campos de texto vazios.
 4. Remoção de 96.553 linhas totalmente duplicadas.
