@@ -231,3 +231,15 @@ print(
     "6. A base não possui preço ou valor de venda; por isso, a análise "
     "não permite avaliar faturamento."
 )
+
+# --- Exportação da base limpa ---
+
+# Salva a tabela tratada sem o índice automático do pandas
+df.to_csv(
+    "df_limpo.csv",
+    index=False,
+    encoding="utf-8-sig",
+    date_format="%d/%m/%Y"
+)
+
+print("\nArquivo df_limpo.csv criado com sucesso.")
