@@ -41,6 +41,25 @@ Para executar o script, salve o arquivo `varejo.csv` na mesma pasta de `miniproj
 9. Criação de agrupamentos por gênero e segmento, e por categoria de produto.
 10. Exportação da base tratada como `df_limpo.csv`.
 
+## Estatísticas do número de filhos
+
+A base possui uma linha para cada item registrado em uma compra. Por isso, o mesmo cliente pode aparecer diversas vezes. Calcular as estatísticas diretamente sobre todas as linhas faria clientes que compraram mais itens terem maior peso na análise.
+
+Antes do cálculo, foi verificado que cada `CL_ID` possuía apenas um valor de número de filhos. Em seguida, foi mantida uma única linha por cliente para que as estatísticas representassem o perfil real dos 1.000 clientes, e não o volume de itens comprados.
+
+Os resultados obtidos foram:
+
+- Contagem: 1.000 clientes.
+- Média: 1,14 filho por cliente.
+- Mediana: 0 filhos.
+- Desvio padrão: 1,41.
+- Moda: 0 filhos.
+- Mínimo: 0 filhos.
+- Máximo: 4 filhos.
+- Quartis: 25% = 0, 50% = 0 e 75% = 2 filhos.
+
+Essa abordagem evita distorções causadas pela repetição dos clientes na base e torna a análise estatística mais representativa.
+
 ## Principais insights
 
 - Foram removidas 96.553 linhas duplicadas, equivalentes a 11,63% da base original.
