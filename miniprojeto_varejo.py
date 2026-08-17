@@ -56,3 +56,41 @@ print(df["CL_SEG"].value_counts())
 
 print("\nValores de PR_CAT:")
 print(df["PR_CAT"].value_counts())
+
+# --- Limpeza dos dados ---
+
+# Guarda a quantidade de linhas antes da limpeza
+linhas_antes = len(df)
+
+# Conta e remove linhas totalmente duplicadas
+duplicatas_removidas = df.duplicated().sum()
+df = df.drop_duplicates().copy()
+
+# Converte a coluna de data para o tipo datetime
+df["DATA"] = pd.to_datetime(df["DATA"], format="%d/%m/%Y", errors="coerce")
+
+# Remove espaços desnecessários nas categorias
+df["PR_CAT"] = df["PR_CAT"].str.strip()
+
+# Verifica se existem categorias vazias
+categorias_vazias = df["PR_CAT"].eq("").sum()
+
+if categorias_vazias > 0:
+    df.loc[df["PR_CAT"].eq(""), "PR_CAT"] = "Sem Categoria"
+    print(f"\nCategorias vazias substituídas: {categorias_vazias}")
+else:
+    print("\nNão foram encontradas categorias vazias.")
+
+# Trata #N/D como categoria não informada
+categorias_nao_informadas = df["PR_CAT"].eq("#N/D").sum()
+df.loc[df["PR_CAT"].eq("#N/D"), "PR_CAT"] = "Sem Categoria"
+
+# Mostra o resultado da limpeza
+print("\n--- Resultado da limpeza ---")
+print("Linhas antes da limpeza:", linhas_antes)
+print("Duplicatas removidas:", duplicatas_removidas)
+print("Linhas após a limpeza:", len(df))
+print("Categorias #N/D substituídas:", categorias_nao_informadas)
+print("Tipo da coluna DATA após conversão:", df["DATA"].dtype)
+print("\nValores de PR_CAT após limpeza:")
+print(df["PR_CAT"].value_counts())
