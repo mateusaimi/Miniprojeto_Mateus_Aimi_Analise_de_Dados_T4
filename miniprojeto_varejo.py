@@ -226,8 +226,8 @@ print(
     "esse também é o número de filhos mais frequente."
 )
 print(
-    f"3. O segmento B concentrou {percentual_segmento_b:.2f}% das "
-    "compras únicas registradas."
+    f"3. Clientes classificados como segmento B na base concentraram "
+    f"{percentual_segmento_b:.2f}% das compras únicas registradas."
 )
 print(
     f"4. A categoria ALIMENTOS esteve presente em "

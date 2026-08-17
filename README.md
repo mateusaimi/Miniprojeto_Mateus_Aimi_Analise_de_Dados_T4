@@ -64,7 +64,7 @@ Essa abordagem evita distorções causadas pela repetição dos clientes na base
 
 - Foram removidas 96.553 linhas duplicadas, equivalentes a 11,63% da base original.
 - Dos 1.000 clientes únicos, 52,7% não possuem filhos. A média foi de 1,14 filho por cliente.
-- O segmento B concentrou 64,12% das compras únicas registradas.
+- Clientes classificados como segmento B na própria base concentraram 64,12% das compras únicas registradas. A base não informa o significado das classificações A, B e C.
 - A categoria ALIMENTOS esteve presente em 98,90% das compras únicas e foi a categoria com mais itens registrados.
 - HIGIENE e LIMPEZA também aparecem em grande parte das compras, indicando presença frequente de produtos essenciais.
   
@@ -75,7 +75,7 @@ Essa abordagem evita distorções causadas pela repetição dos clientes na base
 
 ## Reflexão sobre ETL e qualidade dos dados
 
-ETL significa Extrair, Transformar e Carregar. Neste projeto, a extração ocorreu na leitura do arquivo `varejo.csv` com pandas. A transformação incluiu a correção do separador do arquivo, a remoção de colunas vazias e duplicatas, a conversão da coluna de data e a padronização de categorias não informadas. Por fim, a base tratada foi carregada no arquivo `df_limpo.csv`.
+ETL significa Extrair, Transformar e Carregar. Neste projeto, a extração ocorreu pela leitura estruturada do arquivo `varejo.csv` com `csv.DictReader` e pandas. A transformação incluiu a correção do separador do arquivo, a remoção de colunas vazias e duplicatas, a conversão da coluna de data e a padronização de categorias não informadas. Por fim, a base tratada foi carregada no arquivo `df_limpo.csv`.
 
 A qualidade dos dados é importante porque informações incorretas, repetidas ou incompletas podem gerar conclusões equivocadas. Nesta análise, as duplicatas poderiam aumentar artificialmente a quantidade de itens e compras. Além disso, a categoria `#N/D` não permitia identificar corretamente alguns produtos. Por isso, os problemas encontrados foram tratados e documentados antes da geração das estatísticas e dos agrupamentos.
 
