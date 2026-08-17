@@ -94,3 +94,98 @@ print("Categorias #N/D substituídas:", categorias_nao_informadas)
 print("Tipo da coluna DATA após conversão:", df["DATA"].dtype)
 print("\nValores de PR_CAT após limpeza:")
 print(df["PR_CAT"].value_counts())
+
+# --- Validação do perfil dos clientes ---
+
+# Verifica quantos valores diferentes cada cliente possui em seus dados
+perfil_clientes = df.groupby("CL_ID").agg(
+    filhos_distintos=("CL_FHL", "nunique"),
+    generos_distintos=("CL_GENERO", "nunique"),
+    segmentos_distintos=("CL_SEG", "nunique")
+)
+
+print("\n--- Validação do perfil por cliente ---")
+print("Quantidade de clientes únicos:", perfil_clientes.shape[0])
+print(
+    "Clientes com mais de um número de filhos:",
+    (perfil_clientes["filhos_distintos"] > 1).sum()
+)
+print(
+    "Clientes com mais de um gênero:",
+    (perfil_clientes["generos_distintos"] > 1).sum()
+)
+print(
+    "Clientes com mais de um segmento:",
+    (perfil_clientes["segmentos_distintos"] > 1).sum()
+)
+
+# --- Estatísticas descritivas: número de filhos por cliente ---
+
+# Como o perfil foi validado, mantém uma única linha para cada cliente
+clientes = df.drop_duplicates(subset="CL_ID").copy()
+filhos = clientes["CL_FHL"]
+
+print("\n--- Estatísticas do número de filhos por cliente ---")
+print("Contagem de clientes:", filhos.count())
+print("Média:", round(filhos.mean(), 2))
+print("Mediana:", filhos.median())
+print("Desvio padrão:", round(filhos.std(), 2))
+print("Moda(s):", filhos.mode().tolist())
+print("Mínimo:", filhos.min())
+print("Máximo:", filhos.max())
+
+print("\nQuartis:")
+print(filhos.quantile([0.25, 0.50, 0.75]))
+
+print("\nDistribuição do número de filhos por cliente:")
+print(filhos.value_counts().sort_index())
+
+# --- Validação do identificador de compra ---
+
+# Agrupa os registros pelo identificador da compra
+resumo_compras = df.groupby("CO_ID").agg(
+    datas_diferentes=("DATA", "nunique"),
+    clientes_diferentes=("CL_ID", "nunique"),
+    itens_registrados=("PR_ID", "size")
+)
+
+# Verifica se um mesmo código de compra aparece para mais de uma data ou cliente
+compras_com_datas_diferentes = (resumo_compras["datas_diferentes"] > 1).sum()
+compras_com_clientes_diferentes = (resumo_compras["clientes_diferentes"] > 1).sum()
+
+print("\n--- Validação de CO_ID ---")
+print("Quantidade de CO_ID diferentes:", resumo_compras.shape[0])
+print("CO_ID ligados a mais de uma data:", compras_com_datas_diferentes)
+print("CO_ID ligados a mais de um cliente:", compras_com_clientes_diferentes)
+
+print("\nQuantidade de itens por compra:")
+print(resumo_compras["itens_registrados"].describe())
+
+# --- Agrupamentos para identificar padrões ---
+
+# Agrupamento 1: compras por gênero e segmento do cliente
+compras_por_genero_segmento = df.groupby(
+    ["CL_GENERO", "CL_SEG"]
+).agg(
+    compras_unicas=("CO_ID", "nunique"),
+    clientes_unicos=("CL_ID", "nunique"),
+    itens_registrados=("PR_ID", "size")
+).sort_values("compras_unicas", ascending=False)
+
+compras_por_genero_segmento["percentual_compras"] = (
+    compras_por_genero_segmento["compras_unicas"]
+    / compras_por_genero_segmento["compras_unicas"].sum() * 100
+).round(2)
+
+print("\n--- Agrupamento 1: compras por gênero e segmento ---")
+print(compras_por_genero_segmento)
+
+# Agrupamento 2: itens e compras por categoria de produto
+itens_por_categoria = df.groupby("PR_CAT").agg(
+    itens_registrados=("PR_ID", "size"),
+    produtos_distintos=("PR_ID", "nunique"),
+    compras_unicas=("CO_ID", "nunique")
+).sort_values("itens_registrados", ascending=False)
+
+print("\n--- Agrupamento 2: itens por categoria ---")
+print(itens_por_categoria)
