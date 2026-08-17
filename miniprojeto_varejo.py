@@ -189,3 +189,45 @@ itens_por_categoria = df.groupby("PR_CAT").agg(
 
 print("\n--- Agrupamento 2: itens por categoria ---")
 print(itens_por_categoria)
+
+# --- Conclusões da análise ---
+
+percentual_duplicatas = (duplicatas_removidas / linhas_antes) * 100
+percentual_sem_filhos = (filhos.eq(0).sum() / filhos.count()) * 100
+
+compras_segmento_b = df.loc[df["CL_SEG"] == "B", "CO_ID"].nunique()
+percentual_segmento_b = (compras_segmento_b / resumo_compras.shape[0]) * 100
+
+compras_com_alimentos = itens_por_categoria.loc["ALIMENTOS", "compras_unicas"]
+percentual_compras_alimentos = (
+    compras_com_alimentos / resumo_compras.shape[0]
+) * 100
+
+registros_sem_categoria = (df["PR_CAT"] == "Sem Categoria").sum()
+
+print("\n--- Conclusões da análise ---")
+print(
+    f"1. Foram removidas {duplicatas_removidas} linhas duplicadas, "
+    f"equivalentes a {percentual_duplicatas:.2f}% da base original."
+)
+print(
+    f"2. {percentual_sem_filhos:.1f}% dos clientes não possuem filhos; "
+    "esse também é o número de filhos mais frequente."
+)
+print(
+    f"3. O segmento B concentrou {percentual_segmento_b:.2f}% das "
+    "compras únicas registradas."
+)
+print(
+    f"4. A categoria ALIMENTOS esteve presente em "
+    f"{percentual_compras_alimentos:.2f}% das compras únicas e foi a "
+    "categoria com mais itens registrados."
+)
+print(
+    f"5. Permaneceram {registros_sem_categoria} registros classificados "
+    "como 'Sem Categoria', pois o valor original era #N/D."
+)
+print(
+    "6. A base não possui preço ou valor de venda; por isso, a análise "
+    "não permite avaliar faturamento."
+)
